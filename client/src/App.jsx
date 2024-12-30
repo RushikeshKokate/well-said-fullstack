@@ -1,34 +1,60 @@
-import { useState } from 'react'
+import { useLayoutEffect, useState } from 'react'
 import reactLogo from './assets/react.svg'
 import viteLogo from '/vite.svg'
-import './App.css'
+ 
+import Login from './pages/Login'
+import { Navigate, Outlet, Route, Routes, useLocation } from 'react-router-dom'
+import Dashboard from './pages/Dashboard'
+import Task from './pages/Task'
+import User from './pages/User'
+import Trash from './pages/Trash'
+import TaskDetails from './pages/TaskDetails'
+import { Toaster } from 'sonner'
 
 function App() {
-  const [count, setCount] = useState(0)
+
+  function Layout() {
+    const location = useLocation();
+    const [user, setUser] = useState(false);
+
+    return user ? (
+      <div className='w-full h-screen flex flex-col md:flex-row'>
+        <div className='w-1/5 h-screen bg-white sticky top-0  hidden md:block'>
+          {/* sidebar */}
+        </div>
+        {/* mobileNavbar */}
+        <div>
+          {/* Navbar */}
+          <div>
+            <Outlet/>
+          </div>
+        </div>
+      </div>
+    ) : (
+      <Navigate to="/log-in" state={{ from: location }} replace />
+    )
+  }
+   
 
   return (
-    <>
-      <div>
-        <a href="https://vite.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
-      </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.jsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
-    </>
+     <main>
+      <Routes>
+        <Route element={<Layout/>}>
+          <Route  path="/" element={<Navigate to="/dashboard"/>}/> 
+          <Route  path="/dashboard" element={<Dashboard/>}/> 
+          <Route  path="/tasks" element={<Task/>}/> 
+          <Route  path="/completed/:status" element={<Task/>}/> 
+          <Route  path="/in-progress/:status" element={<Task/>}/> 
+          <Route  path="/todo/:status" element={<Task/>}/> 
+          <Route  path="/team/:status" element={<User/>}/> 
+          <Route  path="/trash/:id" element={<Trash/>}/> 
+          <Route  path="/task/:id" element={<TaskDetails/>}/> 
+        </Route>
+
+        <Route path="/log-in" element={<Login/>} />
+      </Routes>
+      <Toaster/>
+     </main>
   )
 }
 
