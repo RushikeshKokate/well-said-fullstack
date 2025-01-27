@@ -40,7 +40,7 @@ const Sidebar = () => {
     },
     {
       label: "In Progress",
-      link: "in-progress/in-progress",
+      link: "in-progress/in progress",
       icon: <AiOutlineClockCircle />,
     },
     {
